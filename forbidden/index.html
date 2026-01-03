@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403 - No entry!</title>
+    {{ if placeholder "http.error.status_code" }}
+        <title>{{ placeholder "http.error.status_code" }} - Access denied!</title>
+    {{ else }}
+        <title>403 - No entry!</title>
+    {{ end }}
+
     <style>
         * {
             margin: 0;

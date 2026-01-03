@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page not found</title>
+    <!-- <title>404 - Page not found</title> -->
+    {{ if placeholder "http.error.status_code" }}
+        <title>{{ placeholder "http.error.status_code" }} - Not found</title>
+    {{ else }}
+        <title>404 - Page not found!</title>
+    {{ end }}
     <style>
         * {
             margin: 0;

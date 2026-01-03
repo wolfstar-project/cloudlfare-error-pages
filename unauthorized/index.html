@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>401 - Who are you?</title>
+   <!--  <title>401 - Who are you?</title> -->
+    {{ if placeholder "http.error.status_code" }}
+        <title>{{ placeholder "http.error.status_code" }} - Unauthorized!</title>
+    {{ else }}
+        <title>401 - Who are you?!</title>
+    {{ end }}
     <style>
         * {
             margin: 0;
