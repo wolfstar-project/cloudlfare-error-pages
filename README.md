@@ -1,27 +1,36 @@
-# Error pages
-These are the error pages for my various services. They are all written as self-contained HTML files, and are designed to be as simple as possible. They utilize Caddy's [templating features](https://caddyserver.com/docs/caddyfile/directives/templates)
+# WolfStar error pages
 
-<div align="center">
-    <!-- ![screenshot](https://github.com/user-attachments/assets/94e44ec7-8cd4-4b7e-9a73-8c134eab9a60) -->
-    <img src="https://github.com/user-attachments/assets/94e44ec7-8cd4-4b7e-9a73-8c134eab9a60" alt="screenshot demo">
-</div>
+Static, self-contained error pages styled with the WolfStar design system and ready to be fetched as [Cloudflare Custom Error assets](https://developers.cloudflare.com/rules/custom-errors/).
 
-## Usage
-Simply point to the pages in your web server configuration, and you're good to go.
+| Directory      | Intended response         | Cloudflare setup                                               |
+| -------------- | ------------------------- | -------------------------------------------------------------- |
+| `unauthorized` | `401 Unauthorized`        | Custom Error Rule                                              |
+| `forbidden`    | `403 Forbidden`           | Custom Error Rule or block page                                |
+| `not_found`    | `404 Not Found`           | Custom Error Rule                                              |
+| `direct_ip`    | `421 Misdirected Request` | Custom Error Rule matching direct-IP traffic                   |
+| `borked`       | `5XX` server errors       | 500 class Error Page; includes `::CLOUDFLARE_ERROR_500S_BOX::` |
 
-Example:
-```Caddyfile
-# Manual handling
-handle_errors 5xx {
-    root * /path/to/error-pages/borked
-    rewrite * /index.html
-    vars template_message "Your custom message can go here"
-    templates
-    file_server {
-        status 500 # You might want to change this for specific error codes.
-    }
-}
+## Cloudflare usage
+
+1. Publish the required directory so its `index.html` is reachable over HTTPS and returns `200 OK` while Cloudflare fetches it.
+2. In **Rules → Custom Errors**, add the page URL as a custom error asset or select it for the corresponding Error Page type.
+3. Create a Custom Error Rule for the desired status or request condition, select the asset, and set the response status explicitly.
+4. When the source changes, use **Fetch custom page again** in Cloudflare.
+
+Each file has a complete `<head>`, contains no `referrer` meta tag or external dependency, and is far below Cloudflare's 1.5 MB processed-page limit. The pages intentionally use fixed HTTP copy instead of server-side Caddy template placeholders so Cloudflare can store and serve them verbatim. Their footer includes Cloudflare's `::RAY_ID::` token for request-level diagnostics.
+
+For `borked`, keep the Cloudflare token unchanged. It is replaced with the diagnostic content when the 500 class Error Page is served. Cloudflare Error Pages do not cover status `500`, `501`, `503`, or `505`; use a Custom Error Rule if those exact origin responses also need this design.
+
+## Formatting
+
+Install the development dependencies and use the project-local Oxfmt commands:
+
+```sh
+npm install
+npm run format
+npm run format:check
 ```
 
 ## License
+
 These error pages are licensed under the GPL-3.0 license. You can find the full text of the license in the `LICENSE` file.
