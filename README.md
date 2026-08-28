@@ -2,6 +2,8 @@
 
 Static, self-contained error pages styled with the WolfStar design system and ready to be fetched as [Cloudflare Custom Error assets](https://developers.cloudflare.com/rules/custom-errors/).
 
+Based on the original [error-pages](https://github.com/iGerman00/error-pages) by [iGerman00](https://github.com/iGerman00).
+
 | Directory      | Intended response         | Cloudflare setup                                               |
 | -------------- | ------------------------- | -------------------------------------------------------------- |
 | `unauthorized` | `401 Unauthorized`        | Custom Error Rule                                              |
@@ -26,9 +28,9 @@ For `borked`, keep the Cloudflare token unchanged. It is replaced with the diagn
 Install the development dependencies and use the project-local Oxfmt commands:
 
 ```sh
-npm install
-npm run format
-npm run format:check
+pnpm install
+pnpm run format
+pnpm run format:check
 ```
 
 ## License
