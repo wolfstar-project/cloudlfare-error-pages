@@ -4,13 +4,14 @@ Static, self-contained error pages styled with the WolfStar design system and re
 
 Based on the original [error-pages](https://github.com/iGerman00/error-pages) by [iGerman00](https://github.com/iGerman00).
 
-| Directory      | Intended response         | Cloudflare setup                                               |
-| -------------- | ------------------------- | -------------------------------------------------------------- |
-| `unauthorized` | `401 Unauthorized`        | Custom Error Rule                                              |
-| `forbidden`    | `403 Forbidden`           | Custom Error Rule or block page                                |
-| `not_found`    | `404 Not Found`           | Custom Error Rule                                              |
-| `direct_ip`    | `421 Misdirected Request` | Custom Error Rule matching direct-IP traffic                   |
-| `borked`       | `5XX` server errors       | 500 class Error Page; includes `::CLOUDFLARE_ERROR_500S_BOX::` |
+| Directory           | Intended response         | Cloudflare setup                                               |
+| ------------------- | ------------------------- | -------------------------------------------------------------- |
+| `unauthorized`      | `401 Unauthorized`        | Custom Error Rule                                              |
+| `forbidden`         | `403 Forbidden`           | Custom Error Rule or block page                                |
+| `not_found`         | `404 Not Found`           | Custom Error Rule                                              |
+| `direct_ip`         | `421 Misdirected Request` | Custom Error Rule matching direct-IP traffic                   |
+| `too_many_requests` | `429 Too Many Requests`   | Custom Error Rule or rate-limit rule action                    |
+| `borked`            | `5XX` server errors       | 500 class Error Page; includes `::CLOUDFLARE_ERROR_500S_BOX::` |
 
 ## Cloudflare usage
 
@@ -22,6 +23,15 @@ Based on the original [error-pages](https://github.com/iGerman00/error-pages) by
 Each file has a complete `<head>`, contains no `referrer` meta tag or external dependency, and is far below Cloudflare's 1.5 MB processed-page limit. The pages intentionally use fixed HTTP copy instead of server-side Caddy template placeholders so Cloudflare can store and serve them verbatim. Their footer includes Cloudflare's `::RAY_ID::` token for request-level diagnostics.
 
 For `borked`, keep the Cloudflare token unchanged. It is replaced with the diagnostic content when the 500 class Error Page is served. Cloudflare Error Pages do not cover status `500`, `501`, `503`, or `505`; use a Custom Error Rule if those exact origin responses also need this design.
+
+## Preview
+
+Serve the repository locally to browse each page (e.g. `http://localhost:3000/too_many_requests/`):
+
+```sh
+pnpm install
+pnpm run preview
+```
 
 ## Formatting
 
